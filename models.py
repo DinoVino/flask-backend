@@ -14,3 +14,15 @@ class User(db.Model):
             'username': self.username,
             'email': self.email
         }
+    
+class Battery(db.Model):
+    __tablename__ = 'batteries'
+    id = db.Column(db.Integer, primary_key=True)
+    status = db.Column(db.String(25), unique=True, nullable=False)
+
+    def to_dict(self):
+        return{
+            'id': self.id,
+            'status': self.status
+        }
+
