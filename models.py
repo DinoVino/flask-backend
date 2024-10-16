@@ -35,3 +35,7 @@ class Coordinates(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     batteryId: Mapped[int] = mapped_column(ForeignKey("batteries.id"))
     battery: Mapped["Battery"] = relationship(back_populates="coordinates")
+    # TODO: We should add a category for the type of damage it has suffered.
+    # This will help refine the model and aid the enduser.
+    # In the application layer, we need to implement the code that assigns an enum/string. 
+    
