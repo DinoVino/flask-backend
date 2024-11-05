@@ -38,4 +38,9 @@ class Coordinates(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     batteryId: Mapped[int] = mapped_column(ForeignKey("batteries.id"))
     battery: Mapped["Battery"] = relationship(back_populates="coordinates")
- 
+
+def initDB():
+    db.create_all()
+
+if __name__ == "__main__":
+    initDB()
