@@ -7,12 +7,14 @@ from flask_migrate import Migrate
 from models import db, User, Battery
 
 app = Flask(__name__)
+
 # applies CORS headers to all routes, enabling resources to be accessed
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
-
+db = SQLAlchemy(app)
+db.create_all()
 migrate = Migrate(app, db)
 db.init_app(app)
 
