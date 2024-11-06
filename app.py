@@ -1,24 +1,16 @@
 from flask import Flask, request, jsonify
-from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
+from flask_restful import Api, Resource
 from flask_cors import CORS
 from flask_migrate import Migrate
-
-from models import db, User, Battery
-
+from models import User, Battery, Base, Coordinates
+db = SQLAlchemy(model_class=Base)
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 
-# applies CORS headers to all routes, enabling resources to be accessed
-CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.json.compact = False
-db = SQLAlchemy(app)
-db.create_all()
-migrate = Migrate(app, db)
 db.init_app(app)
-
-api = Api(app)
+with app.app_context():
+    db.create_all()
 
 @app.route("/")
 def helloWorld():
@@ -26,8 +18,7 @@ def helloWorld():
 
 @app.route("/battery")
 def getBatteries():
-    batteries = Battery.query.all()
-    return str(batteries)
+    return str("batteries")
 
 #TODO: need to turn this into an API call that returns the battery with the specified ID
 @app.route("/battery/<int:batteryId>")
@@ -41,4 +32,3 @@ def getUsers():
 @app.route("/algorithm")
 def calculateDifference():
     return str(1+1)
-
