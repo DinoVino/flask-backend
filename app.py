@@ -12,7 +12,7 @@ migrate = Migrate(app,db)
 db.init_app(app)
 with app.app_context():
     db.create_all()
-    coordinates = Coordinates(1,1,1)
+    coordinates = Coordinates(1,1,"1")
     db.session.add(coordinates)
     db.session.commit()
 
@@ -33,6 +33,11 @@ def getBattery(batteryId):
 @app.route("/user")
 def getUsers():
     return "This is a list of users"
+
+@app.route("/coordinates")
+def getCoordinates():
+    coordinates = db.session.execute(db.select(Coordinates).order_by(Coordinates.id)).scalars()
+    return coordinates
 
 @app.route("/algorithm")
 def calculateDifference():
