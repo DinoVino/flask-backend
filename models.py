@@ -2,8 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
 
-
-
 class Base(DeclarativeBase):
     pass
 
@@ -11,7 +9,7 @@ db = SQLAlchemy(model_class=Base)
 
 class User(db.Model):
     __tablename__ = 'users'
-    id: Mapped[int] = mapped_column(primary_key=True) 
+    id: Mapped[int] = mapped_column(primary_key=True)
     username:Mapped[str] = mapped_column(unique=True, nullable=False)
     email:Mapped[str] = mapped_column(unique=True, nullable=False)
 
@@ -21,7 +19,7 @@ class User(db.Model):
             'username': self.username,
             'email': self.email
         }
-    
+
 class Battery(db.Model):
     __tablename__ = 'batteries'
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -37,9 +35,16 @@ class Battery(db.Model):
 
 # TODO: We should add a category for the type of damage it has suffered.
 # This will help refine the model and aid the enduser.
-# In the application layer, we need to implement the code that assigns an enum/string.  
+# In the application layer, we need to implement the code that assigns an enum/string.
 class Coordinates(db.Model):
     __tablename__ = 'coordinates'
     id: Mapped[int] = mapped_column(primary_key=True)
+    x: Mapped[int] = mapped_column(nullable=False)
+    y: Mapped[int] = mapped_column(nullable=False)
     batteryId: Mapped[int] = mapped_column(ForeignKey("batteries.id"))
     battery: Mapped["Battery"] = relationship(back_populates="coordinates")
+
+    def __init__(self, x, y, batteryId):
+        self.x = x
+        self.y = y
+        self.batteryId = batteryId

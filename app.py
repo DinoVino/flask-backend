@@ -12,6 +12,9 @@ migrate = Migrate(app,db)
 db.init_app(app)
 with app.app_context():
     db.create_all()
+    coordinates = Coordinates(1,1,1)
+    db.session.add(coordinates)
+    db.session.commit()
 
 @app.route("/")
 def helloWorld():
@@ -19,12 +22,13 @@ def helloWorld():
 
 @app.route("/battery")
 def getBatteries():
-    return str("batteries")
+    batteries = db.session.execute(db.select(Battery).order_by(Battery.id)).scalars()
+    return str(batteries)
 
 #TODO: need to turn this into an API call that returns the battery with the specified ID
 @app.route("/battery/<int:batteryId>")
 def getBattery(batteryId):
-    return f'Battery{batteryId}' 
+    return f'Battery{batteryId}'
 
 @app.route("/user")
 def getUsers():
