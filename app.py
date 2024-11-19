@@ -3,13 +3,26 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api, Resource
 from flask_cors import CORS
 from flask_migrate import Migrate
+from sqlalchemy import MetaData
 from models import User, Battery, Coordinates, Base
-db = SQLAlchemy(model_class=Base)
+
+naming_convention = {
+    "ix": 'ix_%(column_0_label)s',
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(column_0_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s"
+}
+
+db = SQLAlchemy(model_class=Base, metadata=(MetaData(naming_convention=naming_convention)))
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 
+
+
 migrate = Migrate(app,db)
 db.init_app(app)
+migrate.init_app(app,db, render_as_batch=True)
 with app.app_context():
     db.create_all()
 
