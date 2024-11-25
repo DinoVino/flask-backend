@@ -6,19 +6,9 @@ from flask_migrate import Migrate
 from sqlalchemy import MetaData
 from models import User, Battery, Coordinates, Base
 
-naming_convention = {
-    "ix": 'ix_%(column_0_label)s',
-    "uq": "uq_%(table_name)s_%(column_0_name)s",
-    "ck": "ck_%(table_name)s_%(column_0_name)s",
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-    "pk": "pk_%(table_name)s"
-}
-
-db = SQLAlchemy(model_class=Base, metadata=(MetaData(naming_convention=naming_convention)))
+db = SQLAlchemy(model_class=Base)
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-
-
 
 migrate = Migrate(app,db)
 db.init_app(app)
@@ -32,8 +22,8 @@ def helloWorld():
 
 @app.route("/battery")
 def getBatteries():
-    batteries = db.session.execute(db.select(Battery).order_by(Battery.id)).scalars()
-    return str(batteries.first())
+    # batteries = db.session.execute(db.select(Battery).order_by(Battery.id)).scalars()
+    return str("hello")
 
 #TODO: need to turn this into an API call that returns the battery with the specified ID
 @app.route("/battery/<int:id>")
@@ -54,3 +44,17 @@ def getCoordinates():
 @app.route("/algorithm")
 def calculateDifference():
     return str(1+1)
+
+@app.route("/testGenerate")
+def createBatteryWithCoordinates():
+    # coordinates = Coordinates(x=3, y=5, batteryId=1)
+    # cood = []
+    # cood.append(coordinates)
+    # battery = Battery(id=None, status="Broken", type="Tesla", coordinates=cood)
+    # db.session.add(coordinates)
+    # db.session.add(battery)
+    # coordinates.verified = True
+    # battery.verified = True
+    # db.session.commit()
+    battery = db.get_or_404(Battery, 1)
+    return battery.coordinates
