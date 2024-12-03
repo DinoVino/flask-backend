@@ -5,6 +5,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from sqlalchemy import MetaData
 from models import User, Battery, Coordinates, Base
+import json
 
 db = SQLAlchemy(model_class=Base)
 app = Flask(__name__)
@@ -29,7 +30,7 @@ def getBatteries():
 @app.route("/battery/<int:id>")
 def getBattery(id):
     battery = db.get_or_404(Battery, id)
-    return battery.status
+    return "Battery Status: " + battery.status + ", Battery Type: " + battery.type
 
 @app.route("/user/<int:id>")
 def getUser(id):
