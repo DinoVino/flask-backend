@@ -4,13 +4,14 @@ from flask_restful import Api, Resource
 from flask_cors import CORS
 from flask_migrate import Migrate
 from sqlalchemy import MetaData
-from models import User, Battery, Coordinates, Base
+from models.BaseModel import *
 import json
 
-db = SQLAlchemy(model_class=Base)
+# This part is all about instantiating the database, should be moved to a separate class instead to make it clean.
+# Should just be part of a service.
+db = SQLAlchemy(model_class=BaseModel)
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-
 migrate = Migrate(app,db)
 db.init_app(app)
 migrate.init_app(app,db, render_as_batch=True)
