@@ -1,4 +1,4 @@
-from models import *
+import models.BaseModel
 
 class BatteryServices:
     def __init__(self, db):
@@ -13,3 +13,13 @@ class BatteryServices:
         batteriesCoordinatesContainer.append(coordinates)
 
         return batteriesCoordinatesContainer
+
+    def getBattery(batteryId):
+        battery = Battery.query.filter(Battery.id == batteryId).first()
+        coordinates = Coordinates.query.filter_by(batteryId=batteryId).all()
+
+        batteryCoordinates = []
+        batteryCoordinates.append(battery)
+        batteryCoordinates.append(coordinates)
+
+        return batteryCoordinates

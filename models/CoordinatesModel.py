@@ -1,9 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from models.BaseModel import *
 
-# Have to find a way to write this more efficiently
-db = SQLAlchemy(model_class=BaseModel)
-
 class Coordinates(BaseModel):
     __tablename__ = 'coordinates'
     id: Mapped[int] = mapped_column(primary_key=True)
